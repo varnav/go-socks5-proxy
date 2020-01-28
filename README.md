@@ -34,13 +34,24 @@ or
 
 ```docker run --rm curlimages/curl:7.65.3 -s --socks5 <PROXY_USER>:<PROXY_PASSWORD>@<docker host ip>:1080```
 
-## Run with kubernetes
+## Run with Kubernetes
 
 
 ```
 kubectl apply -f .\kubernetes-deployment.yml
 kubectl expose deployment go-socks5-proxy --type LoadBalancer
 ```
+
+## Use with Kubernetes
+
+To get external IP address: `kubectl get service go-socks5-proxy`
+To get login/password: 
+
+```
+kubectl get pods
+kubectl logs go-socks5-proxy-geg440-klgeg
+```
+
 
 ## Authors
 
