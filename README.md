@@ -34,6 +34,14 @@ or
 
 ```docker run --rm curlimages/curl:7.65.3 -s --socks5 <PROXY_USER>:<PROXY_PASSWORD>@<docker host ip>:1080```
 
+## Run with kubernetes
+
+
+```
+kubectl apply -f .\kubernetes-deployment.yml
+kubectl expose deployment go-socks5-proxy --type LoadBalancer
+```
+
 ## Authors
 
 * **Sergey Bogayrets**
