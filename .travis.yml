@@ -1,0 +1,23 @@
+# Use container-based infrastructure for quicker build start-up
+sudo: false
+language: minimal
+env:
+  # Path to 'hadolint' binary
+  HADOLINT: "${HOME}/hadolint"
+install:
+  # Download hadolint binary and set it as executable
+  - curl -sL -o ${HADOLINT} "https://github.com/hadolint/hadolint/releases/download/v1.17.2/hadolint-$(uname -s)-$(uname -m)"
+  - chmod 700 ${HADOLINT}
+  - wget https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz
+  - tar xf kubeval-linux-amd64.tar.gz
+  - sudo cp kubeval /usr/local/bin
+  - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C80E383C3DE9F082E01391A0366C67DE91CA5D5F
+  - sudo apt-get -y install apt-transport-https
+  - echo "deb https://packages.cisofy.com/community/lynis/deb/ stable main" | sudo tee /etc/apt/sources.list.d/cisofy-lynis.list
+  - sudo apt-get update
+  - sudo apt-get -y install lynis
+script:
+  - ${HADOLINT} --ignore DL3015 --ignore DL3003 --ignore DL3008 --ignore DL3018 Dockerfile
+  - sudo kubeval kubernetes-deployment.yml
+  - sudo lynis --no-colors audit dockerfile Dockerfile
+  - docker build . -t varnav/go-socks5-proxy

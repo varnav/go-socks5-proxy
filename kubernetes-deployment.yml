@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-socks5-proxy
+  labels:
+    app: go-socks5-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-socks5-proxy
+  template:
+    metadata:
+      labels:
+        app: go-socks5-proxy
+    spec:
+      containers:
+      - name: go-socks5-proxy
+        image: varnav/go-socks5-proxy
+        env:
+        - name: PROXY_USER
+          value: "someuser"
+        - name: PROXY_PASSWORD
+          value: "somepassword"
+        ports:
+        - name: socks5
+          containerPort: 1080 
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "100m"
